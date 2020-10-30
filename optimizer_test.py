@@ -1,8 +1,8 @@
 '''
 @Author: lh-13
 @Date: 2020-10-17 16:18:09
-@LastEditTime: 2020-10-18 11:22:00
-@LastEditors: Please set LastEditors
+@,@LastEditTime: ,: 2020-10-30 16:23:06
+@,@LastEditors: ,: Please set LastEditors
 @Description: 优化器的一些例子与优化器的策略选择
 @FilePath: \pytorch_test\optimizer_test.py
 '''
@@ -230,6 +230,32 @@ lr_scheduler.CosineAnnealingLR(optimizer, T_max, eta_min=0, last_epoch=-1)
 #----------------------------------------------------ReduceLRonPlateau  监控指标，当指标不再变化则调整。可以监控loss或者准确率，当不在变化的时候，我们再去调整
 '''
 lr_scheduler.ReduceLRonPlateau(optimizer, mode='min', factor=0.1, patience=10, verbose=False, threshold=0.0001, threshold_mode='rel', cooldown=0,min_lr=0, eps=1e-08)
+'''
+
+loss_value = 0.5 
+accuracy = 0.9  
+
+factor = 0.1 
+mode = "min"
+patience = 10     #当连续10次损失不下降的时候执行一次lr=lr*0.1的策略
+cooldown = 10     #先冷却10个epoch,这时候不监控
+min_lr = 1e-4  
+verbose = True   
+
+scheduler_lr = optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=factor, mode=mode, patience=patience, cooldown=cooldown, min_lr=min_lr, verbose=verbose)
+
+for epoch in range(max_epoch):
+    for i in range(iteration):
+
+        optimizer.step()  
+        optimizer.zero_grad()
+
+    if epoch == 5:
+        loss_value = 0.4  
+    scheduler_lr.step(loss_value)
+
+
+
 
 
 
