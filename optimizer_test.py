@@ -115,27 +115,131 @@ gamma 表示调整系数，调整方式就是lr=lr*gramma.这里的gamma一般�
 用的时候只需要指定调整间隔，比如50，那么就是50个epoch调整一次学习率，调整方式就是lr=lr*gamma 
 '''
 
-secheduler_lr = optim.lr_scheduler.StepLR(optimizer, step_size=50)    #设置学习率下降策略
+# secheduler_lr = optim.lr_scheduler.StepLR(optimizer, step_size=50)    #设置学习率下降策略
 
-lr_list, epoch_list = list(),list() 
-for epoch in range(max_epoch):
-    lr_list.append(secheduler_lr.get_lr())
-    epoch_list.append(epoch)
+# lr_list, epoch_list = list(),list() 
+# for epoch in range(max_epoch):
+#     lr_list.append(secheduler_lr.get_lr())
+#     epoch_list.append(epoch)
 
-    for i in range(iteration):
-        loss = torch.pow((weights-target),2)
-        loss.backward()
+#     for i in range(iteration):
+#         loss = torch.pow((weights-target),2)
+#         loss.backward()
 
-        optimizer.step()
-        optimizer.zero_grad()
+#         optimizer.step()
+#         optimizer.zero_grad()
 
-    secheduler_lr.step()   #更新学习策略
+#     secheduler_lr.step()   #更新学习策略
 
-plt.plot(epoch_list, lr_list, label="Step LR Scheduler")
-plt.xlabel("Epoch")
-plt.ylabel("learning rate")
-plt.legend()
-plt.show()
+# plt.plot(epoch_list, lr_list, label="Step LR Scheduler")
+# plt.xlabel("Epoch")
+# plt.ylabel("learning rate")
+# plt.legend()
+# plt.show()
+
+
+#----------------------------------------------------Multi Step LR  按给定间隔调整学习率
+'''
+lr_scheduler.MultiStepLR(optimizer, milestones, gamma=0.1, last_epoch=-1, verbose=False)
+milestones 表示设定调整时刻数，可以是一个list，表示调整的间隔,比如：[50, 125, 150],50个epoch、125个epoch、150个epoch调整一次学习率
+gamma 调整方式：lr=lr*gamma 
+'''
+
+# milestones = [50, 125, 160]
+# scheduler_lr = optim.lr_scheduler.MultiStepLR(optimizer, milestones=milestones, gamma=0.1)
+# lr_list, epoch_list = list(), list()  
+# for epoch in range(max_epoch):
+#     lr_list.append(scheduler_lr.get_lr())
+#     epoch_list.append(epoch)
+
+#     for i in range(iteration):
+#         loss = torch.pow((weights-target), 2)
+#         loss.backward()
+
+#         optimizer.step() 
+#         optimizer.zero_grad()
+
+#     scheduler_lr.step()  
+
+# plt.plot(epoch_list, lr_list, label='Multi Step LR Scheduler\nmilestones:{}'.format(milestones))
+# plt.xlabel("epoch")
+# plt.ylabel("Learning rate")
+# plt.legend()
+# plt.show()
+
+#----------------------------------------------------Exponential LR 按指数衰减调整学习率
+'''
+lr_scheduler.ExponentialLR(optimizer, gamma, last_epoch=-1)
+gamma表示指数的底了。调整方式：lr=lr*gamma^epoch  
+'''
+
+# gamma = 0.95 
+# scheduler_lr = optim.lr_scheduler.ExponentialLR(optimizer, gamma=gamma)
+
+# lr_list, epoch_list = list(), list()   
+
+# for epoch in range(max_epoch):
+#     lr_list.append(scheduler_lr.get_lr())
+#     epoch_list.append(epoch)
+
+#     for i in range(iteration):
+#         loss = torch.pow((weights-target), 2)
+#         loss.backward()
+
+#         optimizer.step() 
+#         optimizer.zero_grad()  
+
+#     scheduler_lr.step()  
+
+# plt.plot(epoch_list, lr_list, label='Exponential LR Scheduler\n')
+# plt.xlabel("Epoch")
+# plt.ylabel("Learning rate")
+# plt.legend()  
+# plt.show() 
+
+#----------------------------------------------------CosineAnnealingLR  余弦周期调整学习率
+'''
+lr_scheduler.CosineAnnealingLR(optimizer, T_max, eta_min=0, last_epoch=-1)
+
+'''
+
+# t_max = 50  
+# scheduler_lr = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=t_max, eta_min=0.)
+# lr_list, epoch_list = list(), list()  
+
+# for epoch in range(max_epoch):
+#     lr_list.append(scheduler_lr.get_lr())
+#     epoch_list.append(epoch)
+
+#     for i in range(iteration):
+#         loss = torch.pow((weights-target), 2)
+#         loss.backward()
+
+#         optimizer.step()  
+#         optimizer.zero_grad()
+
+#     scheduler_lr.step()   
+
+# plt.plot(epoch_list, lr_list, label="CosineAnnealingLR Scheduler\nT_max:{}".format(t_max))
+# plt.xlabel("Epoch")
+# plt.ylabel("Learning rate")
+# plt.legend()
+# plt.show()
+
+
+#----------------------------------------------------ReduceLRonPlateau  监控指标，当指标不再变化则调整。可以监控loss或者准确率，当不在变化的时候，我们再去调整
+'''
+lr_scheduler.ReduceLRonPlateau(optimizer, mode='min', factor=0.1, patience=10, verbose=False, threshold=0.0001, threshold_mode='rel', cooldown=0,min_lr=0, eps=1e-08)
+
+
+
+
+
+
+
+
+
+
 
 
 
