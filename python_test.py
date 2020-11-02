@@ -1,8 +1,8 @@
 '''
 @Author: lh-13
 @Date: 2020-10-15 10:18:00
-@LastEditTime: 2020-10-15 10:43:40
-@LastEditors: Please set LastEditors
+@,@LastEditTime: ,: 2020-11-02 23:03:49
+@,@LastEditors: ,: Please set LastEditors
 @Description: 测试python的一些方法与功能实现
 @FilePath: \pytorch_test\python_test.py
 '''
@@ -41,16 +41,29 @@
 # key3 value3
 
 #zip 示例
-str1 = "key1 | key2 | key3"
-str2 = "value1 | value2 | value3"
+# str1 = "key1 | key2 | key3"
+# str2 = "value1 | value2 | value3"
 
-keys = str1.split('|')
-values = str2.split('|')
+# keys = str1.split('|')
+# values = str2.split('|')
 
-d = dict(zip(keys, values))
+# d = dict(zip(keys, values))
 
-for k, v in d.items():
-    print(k, v)
+# for k, v in d.items():
+#     print(k, v)
+
+
+#---------------------------------------------------面试题
+#给个有序数组，然后求元素平方后不重复的元素个数，例如[-10, -10, -5, 0, 1, 5, 8, 10]
+
+data = [-10, -10, -5, 0, 1, 5, 8, 10]
+print(len(set([x**2 for x in data])))
+
+
+#https://www.runoob.com/python3/python3-set.html
+
+
+
 
 
 

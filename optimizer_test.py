@@ -1,7 +1,7 @@
 '''
 @Author: lh-13
 @Date: 2020-10-17 16:18:09
-@,@LastEditTime: ,: 2020-10-30 16:23:06
+@,@LastEditTime: ,: 2020-10-31 10:46:51
 @,@LastEditors: ,: Please set LastEditors
 @Description: 优化器的一些例子与优化器的策略选择
 @FilePath: \pytorch_test\optimizer_test.py
@@ -227,32 +227,101 @@ lr_scheduler.CosineAnnealingLR(optimizer, T_max, eta_min=0, last_epoch=-1)
 # plt.show()
 
 
-#----------------------------------------------------ReduceLRonPlateau  监控指标，当指标不再变化则调整。可以监控loss或者准确率，当不在变化的时候，我们再去调整
+#----------------------------------------------------ReduceLRonPlateau  监控指标，当指标不再变化则调整。可以监控loss或者准确率，当不在变化的时候，我们再去调整。这个比较实用
 '''
 lr_scheduler.ReduceLRonPlateau(optimizer, mode='min', factor=0.1, patience=10, verbose=False, threshold=0.0001, threshold_mode='rel', cooldown=0,min_lr=0, eps=1e-08)
+mode:min/max 两种模式（min就是监控指标不下降就调整，比如loss,max是监控指标不上升就调整，比如acc）
+factor:调整系数，类似上面的gamma
+patience:"耐心"，接受几次值不变化，这一定是要连续多少次不变化
+cooldown:"冷却时间"，即停止监控一段时间
+verbose:是否打印日志，也就是打印什么时候更新了学习率
+min_lr:学习率下限
+eps:学习率衰减最小值
 '''
 
-loss_value = 0.5 
-accuracy = 0.9  
+# loss_value = 0.5 
+# accuracy = 0.9  
 
-factor = 0.1 
-mode = "min"
-patience = 10     #当连续10次损失不下降的时候执行一次lr=lr*0.1的策略
-cooldown = 10     #先冷却10个epoch,这时候不监控
-min_lr = 1e-4  
-verbose = True   
+# factor = 0.1 
+# mode = "min"
+# patience = 10     #当连续10次损失不下降的时候执行一次lr=lr*0.1的策略
+# cooldown = 10     #先冷却10个epoch,这时候不监控
+# min_lr = 1e-4  
+# verbose = True    #会打印日志信息，多少次更新了学习率
 
-scheduler_lr = optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=factor, mode=mode, patience=patience, cooldown=cooldown, min_lr=min_lr, verbose=verbose)
+# scheduler_lr = optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=factor, mode=mode, patience=patience, cooldown=cooldown, min_lr=min_lr, verbose=verbose)
 
+# for epoch in range(max_epoch):
+#     for i in range(iteration):
+
+#         optimizer.step()  
+#         optimizer.zero_grad()
+
+#     if epoch == 5:
+#         loss_value = 0.4  
+#     scheduler_lr.step(loss_value)    #loss_value 为我们传入的监控参数
+
+#----------------------------------------------------lambda  自定义调整策略，这个也比较实用
+'''
+lr_scheduler.LambdaLR(optimizer,lr_lambda,last_epoch)
+可以自定义我们自己的调整策略，还可以对不同的参数组设置不同的学习率调整方法，所以这个功能在finetune中非常实用
+lr_lambda:表示funtion或者list
+'''
+
+lr_init = 0.1 
+weights_1 = torch.randn((6, 3, 5, 5))
+weights_2 = torch.ones((5, 5))
+
+optimizer = optim.SGD([
+    {'params':[weights_1]},
+    {'params':[weights_2]}
+], lr=lr_init)
+
+lambda1 = lambda epoch:0.1 **(epoch//20)
+lambda2 = lambda epoch:0.95**epoch  
+
+scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=[lambda1, lambda2])
+
+lr_list, epoch_list = list(), list()
 for epoch in range(max_epoch):
     for i in range(iteration):
-
+        
         optimizer.step()  
         optimizer.zero_grad()
 
-    if epoch == 5:
-        loss_value = 0.4  
-    scheduler_lr.step(loss_value)
+    scheduler.step()  
+    lr_list.append(scheduler.get_lr())
+    epoch_list.append(epoch)
+
+    print("epoch:{:5d},lr:{}".format(epoch, scheduler.get_lr())) 
+
+
+plt.plot(epoch_list, [i[0] for i in lr_list], label="lambda_1")
+plt.plot(epoch_list, [i[1] for i in lr_list], label="lambda_2")
+plt.xlabel("Epoch")
+plt.ylabel("Learning Rate")
+plt.title("LambdaLR")
+plt.legend()
+plt.show()  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
