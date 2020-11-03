@@ -1,7 +1,7 @@
 '''
 @,@Author: ,: lh-13
 @,@Date: ,: 2020-11-03 13:46:49
-@,@LastEditTime: ,: 2020-11-03 15:39:56
+@,@LastEditTime: ,: 2020-11-03 22:51:12
 @,@LastEditors: ,: Please set LastEditors
 @,@Description: ,: pytorch 实例100
 @,@FilePath: ,: \pytorch_test\python_test_100_example.py
@@ -61,7 +61,7 @@ if flag == 1:
 
 
 #-------------------------------------------------------5. 计算三角形的面积 
-flag = 1 
+flag = 0 
 if flag == 1:   
     a = float(input('请输入三角形的边长a:'))
     b = float(input('请输入三角形的边长b：'))
@@ -75,4 +75,47 @@ if flag == 1:
     area = (s*(s-a)*(s-b)*(s-c))**0.5        
     print('area:%.2f' % area)
 
+
+#-------------------------------------------------------6. 计算圆的面积 
+#定义一个函数实现求圆的面积
+
+flag = 0  
+def findArea(r):
+    PI = 3.142
+    return PI*r*r   
+
+if flag == 1:
+    print('圆的面积为：%.6f'%findArea(5))
+
+#-------------------------------------------------------7. python 随机数生成
+#生成0~9之间的随机数
+flag = 0  
+if flag == 1:
+    import random           
+    print(random.randint(0,9))
+
+#-------------------------------------------------------8. 判断字符串是否为数字
+flag = 0  
+def is_number(s):
+    try:
+        float(s)   #如果这里不报错，则说明可以转换成数字，则为数字
+        return True
+    except ValueError:     #python 常用标准异常，表示传入的参数无效
+        pass   #什么也不做
+
+    try:
+        import unicodedata  #处理ascii码的包
+        unicodedata.numeric(s)
+        return True  
+    except (TypeError, ValueError):
+        pass  
+    
+    return False    
+
+if flag == 1:
+    print(is_number('foo'))
+    print(is_number(1))
+    print(is_number(-1.37))
+    print(is_number(1e3))    
+    print(is_number('.'))
 
