@@ -1,7 +1,7 @@
 '''
 @,@Author: ,: lh-13
 @,@Date: ,: 2020-11-03 13:46:49
-@,@LastEditTime: ,: 2020-11-03 22:51:12
+@,@LastEditTime: ,: 2020-11-04 17:26:11
 @,@LastEditors: ,: Please set LastEditors
 @,@Description: ,: pytorch 实例100
 @,@FilePath: ,: \pytorch_test\python_test_100_example.py
@@ -118,4 +118,56 @@ if flag == 1:
     print(is_number(-1.37))
     print(is_number(1e3))    
     print(is_number('.'))
+
+
+#-------------------------------------------------------9. 斐波那契数列
+#斐波那契数列指的是这样一个数列 0, 1, 1, 2, 3, 5, 8, 13,特别指出：第0项是0，第1项是第一个1。从第三项开始，每一项都等于前两项之和
+flag = 0 
+def fibonacci(n):
+    if n <= 1:
+        return n   
+    else:  
+        return fibonacci(n-1)+fibonacci(n-2)
+
+if flag == 1: 
+    for i in range(0, 8):
+        print(fibonacci(i), end=' ')
+
+#-------------------------------------------------------10. python 约瑟夫生者死者小游戏
+'''
+30个人在一条船上，超载，需要15人下船。
+于是人们排成一队，排队的位置即为他们的编号
+报数，从1开始，数到9的人下船，接着重新开始从1报数，如此循环，直到船上仅剩15人为止，
+问都 有哪些人下了船
+'''
+flag = 1
+if flag == 1:
+    num = list(range(1, 31, 1))
+    for i in range(30):
+        num[i] = 1   #创建一个有30个元素的列表，每个位置的值为1，代表人在船上，当值为0时则人已经下船了
+    
+    go_num = 0
+    start_num = 0
+    i = 0
+    while(go_num < 15):   #可以报数
+        checked = 0
+        #for i in range(start_num, 30):
+        while (i <= 30):
+            if num[i] == 1:   #还在船上，报数有效
+                checked += 1
+            # else:
+            #     continue
+            if checked == 9:
+                num[i] = 0
+                print(i+1, '号下船了\n')     #因为索引为0-29
+                start_num = i+1
+                go_num += 1
+                break   #此次报数结束，重新开始下一轮报数
+            i+=1
+            if i == 30:   #一轮报数结束，需要从头开始接着报
+                start_num = -1
+                i = 0
+
+
+
 
