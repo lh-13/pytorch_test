@@ -1,7 +1,7 @@
 '''
 @,@Author: ,: lh-13
 @,@Date: ,: 2020-11-03 13:46:49
-@,@LastEditTime: ,: 2020-11-04 17:26:11
+@,@LastEditTime: ,: 2020-11-05 21:34:41
 @,@LastEditors: ,: Please set LastEditors
 @,@Description: ,: pytorch 实例100
 @,@FilePath: ,: \pytorch_test\python_test_100_example.py
@@ -140,7 +140,7 @@ if flag == 1:
 报数，从1开始，数到9的人下船，接着重新开始从1报数，如此循环，直到船上仅剩15人为止，
 问都 有哪些人下了船
 '''
-flag = 1
+flag = 0
 if flag == 1:
     num = list(range(1, 31, 1))
     for i in range(30):
@@ -167,6 +167,48 @@ if flag == 1:
             if i == 30:   #一轮报数结束，需要从头开始接着报
                 start_num = -1
                 i = 0
+
+#-------------------------------------------------------11. python 数组翻转指定个数的元素
+'''
+定义一个整型数组，并将指定个数的元素翻转到数组的尾部。
+
+例如：(ar[], d, n) 将长度为 n 的 数组 arr 的前面 d 个元素翻转到数组尾部。
+
+以下演示了将数组的前面两个元素放到数组后面。
+
+原始数组:
+[1,2,3,4,5,6,7]
+翻转后：
+[3, 4, 5, 6, 7, 1, 2]
+'''
+
+'''
+解题思路：
+分别循环d次，每次将d中第一个元素先储存在temp中，然后d之后的元素依次往前挪移一个
+'''
+
+
+flag = 1 
+def leftRotate(arr, d, n):
+    for i in range(d):
+        leftRotatebyone(arr, n)
+
+def leftRotatebyone(arr, n):
+    temp = arr[0]
+    for i in range(n-1):
+        arr[i] = arr[i+1]
+    arr[n-1] = temp   
+
+def printArr(arr, size):
+    for i in range(size):
+        print(arr[i])
+
+if flag == 1:
+    arr = [1, 2, 3, 4, 5, 6, 7]
+    leftRotate(arr, 2, len(arr))
+    printArr(arr, len(arr))
+
+
 
 
 
