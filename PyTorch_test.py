@@ -1,8 +1,8 @@
 '''
 @Author: your name
 @Date: 2020-10-17 10:32:03
-@LastEditTime: 2020-10-17 16:17:18
-@LastEditors: Please set LastEditors
+@,@LastEditTime: ,: 2020-11-12 16:40:59
+@,@LastEditors: ,: Please set LastEditors
 @Description: In User Settings Edit
 @FilePath: \pytorch_test\PyTorch_test.py
 '''
@@ -43,10 +43,27 @@ import torch
 
 #tensor 的排序与取极值
 #sort()
-a = torch.randn(2,2)
-print(a)
+flag = 0
+if flag == 1:
+    a = torch.randn(2,2)
+    print(a)
 
-print(a.sort(0, True)[0])   #按照第0维即按行进行排序， 每一列进行比较，True代表降序， False代表升序
-print('--------------------------------------')
-print(a.sort(1, True)[0])
-print(a.sort(0, True)[1])  #???
+    print(a.sort(0, True)[0])   #按照第0维即按行进行排序， 每一列进行比较，True代表降序， False代表升序
+    print('--------------------------------------')
+    print(a.sort(1, True)[0])
+    print(a.sort(0, True)[1])  #???   应该是排序后矩阵之前的索引
+
+
+#torch.sort 对向量进行排序
+flag = 1  
+if flag == 1: 
+    a = torch.tensor([50, 20, 30, 10])
+    print(a)
+
+    b = torch.sort(a)
+    print(b)
+    print('第一维度是排序后的向量：{}'.format(b[0]))
+    print('第二维度是排序后对应排序前向量的索引：{}'.format(b[1]))
+
+
+
