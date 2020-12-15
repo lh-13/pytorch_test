@@ -55,12 +55,12 @@
 
 #---------------------------------------------------面试题
 #给个有序数组，然后求元素平方后不重复的元素个数，例如[-10, -10, -5, 0, 1, 5, 8, 10]
-
-data = [-10, -10, -5, 0, 1, 5, 8, 10]
-print(len(set([x**2 for x in data])))
-
-
+flag = 0 
+if flag == 1:
+    data = [-10, -10, -5, 0, 1, 5, 8, 10]
+    print(len(set([x**2 for x in data])))
 #https://www.runoob.com/python3/python3-set.html
+
 
 
 

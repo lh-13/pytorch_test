@@ -55,7 +55,7 @@ if flag == 1:
 
 
 #torch.sort 对向量进行排序
-flag = 1  
+flag = 0  
 if flag == 1: 
     a = torch.tensor([50, 20, 30, 10])
     print(a)
@@ -64,6 +64,17 @@ if flag == 1:
     print(b)
     print('第一维度是排序后的向量：{}'.format(b[0]))
     print('第二维度是排序后对应排序前向量的索引：{}'.format(b[1]))
+
+
+flag = 1 #  测试下 tensor ==        
+if flag == 1:
+    tensor_1 = torch.randn((4))
+    print(tensor_1)
+    min_value = min(tensor_1.abs())
+    print(min_value)
+    percent = (min_value == tensor_1.abs()).nonzero().item() / len(tensor_1)
+    print( percent)
+
 
 
 
