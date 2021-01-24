@@ -63,6 +63,31 @@ if flag == 1:
 
 
 
+#----------------------------------------------------------面试题append()、extend()逐个添加
+#list.append(obj) 向列表中添加一个对象object,object做为一个整体（如果添加的是列表，则会带有[]）   整体添加
+#list.extend(sequence) 把一个序列seq的内容添加到列表中    逐个添加
+flag = 1
+if flag == 1:
+    #append()
+    array = [1, 2, 3]
+    array.append([4 , 5, 6])   #[1, 2, 3, [4, 5, 6]]
+    #array.append(4)    #[1, 2, 3, 4]
+    #array.append('4')   #[1, 2, 3, '4']
+    print(array)
+
+    #extend
+    array_1 = [1, 2, 3]
+    array_1.extend([4, 5 ,6])   #[1, 2, 3, 4, 5, 6]
+    #array_1.extend([4])   #[1, 2, 3, 4]
+    #array_1.extend('4')   #[1, 2, 3, '4']
+    print(array_1)
+
+
+
+
+
+
+
 
 
 
