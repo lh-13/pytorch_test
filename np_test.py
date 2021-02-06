@@ -11,6 +11,7 @@
 import numpy as np
 import cv2     
 import sys 
+import matplotlib.pyplot as plt
 
 #-----------------------------------------------------------------使用numpy实现卷积操作
 
@@ -42,16 +43,15 @@ def conv_myself(input, kernel=(3, 3), padding=0, stride=1):
     
     input[h, w, c]
     kernel[c, h, w]
-
     '''
 
     #判断图像通道数与卷积核对应关系   c==d 
-    if len(input.shape) != 3 or len(kernel.shape) != 3:
-        print('input or kernel shape has problem!')
-        sys.exit()
-    if input.shape[2] != kernel.shape[0]:
-        print('input channel is not same as kernel input chanel')
-        sys.exit()
+    # if len(input.shape) >= 3 or len(kernel.shape) != 3:
+    #     print('input or kernel shape has problem!')
+    #     sys.exit()
+    # if input.shape[2] != kernel.shape[0]:
+    #     print('input channel is not same as kernel input chanel')
+    #     sys.exit()
 
     #检测过滤器是否是方阵
     if kernel.shape[1] != kernel.shape[2]:
@@ -65,7 +65,7 @@ def conv_myself(input, kernel=(3, 3), padding=0, stride=1):
 
     #定义一个输出图   (输出大小：= (输入size + 2*padding - kernel.size)/stride)
     #feature_maps = np.zeros((input.shape[0], kernel.shape[1], (input.shape[2]+2*padding-kernel.shape[2])/stride, (input.shape[3]+2*padding-kernel.shape[3])/stride))
-    feature_maps = np.zeros((input.shape[0] - kernel.shape[1]+1, input.shape[1]-kernel.shape[2]+1, kernel_filter.shape[0]))
+    feature_maps = np.zeros((input.shape[0] - kernel.shape[1]+1, input.shape[1]-kernel.shape[2]+1, kernel.shape[0]))
     #进行卷积计算
     for filter_num in range(kernel.shape[0]):
         print('filter:', filter_num+1)
@@ -73,24 +73,34 @@ def conv_myself(input, kernel=(3, 3), padding=0, stride=1):
 
         #检测单个过滤器是否有多个通道。如果有，那么每个通道将对图像进行卷积。所有卷积的结果加起来得到一个特征图。
         if len(cur_filter.shape) > 2:
-            continue   #temp
-
+            #检测单个过滤器是否有多个通道，如果有，那么每个通道将对图像进行卷积。所有卷积的结果加起来得到一个特征图
+            conv_map = conv_(input[:,:,0], cur_filter[:, :, 0])
+            for ch_num in range(1, cur_filter.shape[-1]):
+                conv_map = conv_map + conv_(input[:, :, ch_num], cur_filter[:, :, ch_num])
         else:
             #过滤器为2维，即单个通道
             conv_map = conv_(input, cur_filter)
+        feature_maps[:, :, filter_num] = conv_map
 
+    return feature_maps
+
+def pooling(feature_map, size=2, stride=2):   
+    #定义池化操作的输出
+    pool_out = np.zeros((np.uint16((feature_map[0] - size + 1)/stride + 1), np.uint16((feature_map[1]-size+1)/stride+1),feature_map.shape[-1]))
+
+    for map_num in range(feature_map.shape[-1]):
+        r2 = 0
+        for row in np.arange(0, feature_map.shape[0]-size+1, stride):
+            c2 = 0  
+            for c in np.arange(0, feature_map.shape[1]-size+1, stride):
+                pool_out[r2, c2, map_num] = np.max([feature_map[row:row+size,c:c+size, map_num]])
+                c2 = c2+1
+            r2 = r2 + 1 
+    return pool_out  
 
     
 
     
-
-
-
-
-    return 0
-
-
-
 
 
 if __name__ == '__main__':
@@ -98,11 +108,11 @@ if __name__ == '__main__':
     image = cv2.imread(image_path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     image = cv2.resize(image, (640,640))
-    #image_gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+    image_gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     print(image.shape)
-    image_array = np.array(image)
+    image_array = np.array(image_gray)
 
-    cv2.imshow('srcImage', image)
+    cv2.imshow('srcImage', image_gray)
 
     #定义卷积核
     kernel = np.zeros([2, 3, 3])   #[d, h, w]    #如果是彩色图，则d=3
@@ -119,9 +129,33 @@ if __name__ == '__main__':
                                 ]])
     print(kernel)
 
-    feature_map = conv_myself(image, kernel)
+    feature_map = conv_myself(image_gray, kernel)
+    #结果可视化
+    # fig0, ax0 = plt.subplots(nrows=1, ncols=1)
+    # ax0.imshow(image_gray).set_cmap("gray")
+    # ax0.set_title("Input image")
+    # ax0.get_xaxis().set_ticks([])
+    # ax0.get_yaxis().set_ticks([])
+    # plt.savefig("in_img1.png", bbox_inches="tight")
+    # plt.close(fig0)
+
+    #卷积后可化视
+    fig1, ax1 = plt.subplots(nrows=3, ncols=2)
+    ax1[0, 0].imshow(feature_map[:, :, 0]).set_cmap("gray")
+    ax1[0, 0].get_xaxis().set_ticks([])
+    ax1[0, 0].get_yaxis().set_ticks([])
+    ax1[0, 0].set_title("L1-Map1")
+
+    plt.imshow(feature_map)
+    plt.show()  
+
 
     cv2.waitKey(0)
+
+
+
+
+    
 
 
 

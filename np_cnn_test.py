@@ -193,8 +193,9 @@ ax1[2, 0].get_xaxis().set_ticks([])
 ax1[2, 0].get_yaxis().set_ticks([])
 ax1[2, 1].set_title("L1-Map2ReLUPool")
 
-plt.savefig("L1.png", bbox_inches="tight")
-plt.close(fig1)
+plt.show()
+# plt.savefig("L1.png", bbox_inches="tight")
+# plt.close(fig1)
 
 # 第二层
 fig2, ax2 = plt.subplots(nrows=3, ncols=3)
